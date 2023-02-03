@@ -1,0 +1,35 @@
+Sub McrGerarPlanilhaResumo()
+
+Dim strNovaPlanilha As String
+Dim strDiretorio As String
+Dim strPlanilhaAtual, strresposta As String
+Dim i, intNumeroDePlanilhas As Integer
+'
+    strDiretorio = ActiveWorkbook.Path
+    Sheets(Array("Processo 1", "Processo 2", "Processo 3")).Copy
+    ActiveWorkbook.SaveAs Filename:= _
+        strDiretorio & "/RelatorioDeFaturamento-Furukawa-" & Format(Now(), "yyyy-mm-dd-hh-mm") & ".xlsx" _
+        , FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    Range("H14").Select
+    
+    strNovaPlanilha = ActiveWorkbook.Name
+    Sheets(1).Select
+    i = 1
+    intNumeroDePlanilhas = ActiveWorkbook.Worksheets.Count
+    For i = 1 To intNumeroDePlanilhas
+        Cells.Select
+        Selection.Copy
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        Range("A1").Select
+        If (i < intNumeroDePlanilhas) Then
+            ActiveSheet.Next.Select
+        End If
+    Next
+        
+        Sheets(1).Select
+        
+    strresposta = MsgBox("Resumo gerado com Sucesso!", vbOKOnly + vbExclamation, "Alerta")
+    
+    
+End Sub
